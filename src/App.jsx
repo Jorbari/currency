@@ -26,9 +26,6 @@ class App extends React.Component {
       const data = await response.json();
       console.table(data)
       this.setState({raw_data: data});
-      if (data.length > 0) {
-        this.show_non_supported_currency_in_us();
-      }
     } catch(err) {
       console.log(err);
     }
@@ -110,7 +107,6 @@ class App extends React.Component {
   }
 
   sort_list_apha_order = () => {
-
     
 
 
