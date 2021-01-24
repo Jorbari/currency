@@ -39,7 +39,7 @@ class App extends React.Component {
 
     if (this.state.show_non_supported_currency_in_us) {
 
-      filtered_raw_data = this.state.raw_data.filter( currency => currency.isSupportedInUS === false);
+      // filtered_raw_data = this.state.raw_data.filter( currency => currency.isSupportedInUS === false);
 
       if (this.state.currencies.length > 0)  {
         filtered_currency_data = this.state.currencies.filter( currency => currency.isSupportedInUS === false);
@@ -107,9 +107,6 @@ class App extends React.Component {
   }
 
   sort_list_apha_order = () => {
-    
-    // const hold = this.state.currencies.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (a.name.toLowerCase() === b.name.toLowerCase()) ? ((a.code > b.code) ? 1 : -1) : -1 );
-    // console.table(hold)
 
     const hold = this.state.currencies.sort(function(a, b) {
       var nameA = a.name.toUpperCase(); // ignore upper and lowercase
