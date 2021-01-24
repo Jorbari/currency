@@ -32,77 +32,65 @@ class App extends React.Component {
 
   }
 
-  show_non_supported_currency_in_us = () => {
-    let set_filtered_data = [];
-    let filtered_raw_data = [];
+
+  toggle_data = (event) => {
+    console.log(event.target.name)
+    // this.setState({show_support_test_mode: !this.state.show_support_test_mode});
+    this.setState({
+      [event.target.name]: !(this.state[event.target.name])
+    })
+    setTimeout(() => {
+      this.filter();
+    }, 2000);
+  }
+
+
+  filter = () => {
+    console.log(this.state.show_support_test_mode);
     let filtered_currency_data = [];
 
-    if (this.state.show_non_supported_currency_in_us) {
+    if (this.state.show_support_test_mode && !this.state.show_non_supported_currency_in_us) {
 
-      // filtered_raw_data = this.state.raw_data.filter( currency => currency.isSupportedInUS === false);
+      if (this.state.currencies.length > 0 ) {
+        filtered_currency_data = this.state.currencies.filter( currency => currency.supportsTestMode === true);
+        if (this.state.sort_list_by_aphabetic_order) {
+          this.sort_list_apha_order()
+        }
+
+      } else {
+        filtered_currency_data = this.state.raw_data.filter( currency => currency.supportsTestMode === true);
+        if (this.state.sort_list_by_aphabetic_order) {
+          this.sort_list_apha_order()
+        }
+
+      }
+      
+      this.setState({currencies: filtered_currency_data});
+      // console.table(filtered_currency_data);
+
+    } else if (!this.state.show_support_test_mode && this.state.show_non_supported_currency_in_us) {
 
       if (this.state.currencies.length > 0)  {
         filtered_currency_data = this.state.currencies.filter( currency => currency.isSupportedInUS === false);
+        if (this.state.sort_list_by_aphabetic_order) {
+          this.sort_list_apha_order()
+        }
+      } else {
+        filtered_currency_data = this.state.raw_data.filter( currency => currency.supportsTestMode === true);
+        if (this.state.sort_list_by_aphabetic_order) {
+          this.sort_list_apha_order()
+        }
+
       }
- 
-      set_filtered_data = [...filtered_raw_data, ...filtered_currency_data];
 
-
-      this.setState({currencies: set_filtered_data, show_non_supported_currency_in_us: false});
-      console.table(set_filtered_data);
+      this.setState({currencies: filtered_currency_data, show_non_supported_currency_in_us: this.state.show_non_supported_currency_in_us});
 
     } else {
-
-      filtered_raw_data = this.state.raw_data.filter( currency => currency.isSupportedInUS === true);
-
-      if (this.state.currencies.length > 0)  {
-        filtered_currency_data = this.state.currencies.filter( currency => currency.isSupportedInUS === true);
-      }
- 
-      set_filtered_data = [...filtered_raw_data, ...filtered_currency_data];
-
-
-      this.setState({currencies: set_filtered_data, show_non_supported_currency_in_us: true});
-      console.table(set_filtered_data);
+      this.setState({currencies: this.state.raw_data});
+      filtered_currency_data = this.state.raw_data;
     }
 
-  }
-
-  filter_currency_test_mode = () => {
-
-    let set_filtered_data = [];
-    let filtered_raw_data = [];
-    let filtered_currency_data = [];
-
-    if (this.state.show_support_test_mode) {
-
-      filtered_raw_data = this.state.raw_data.filter( currency => currency.supportsTestMode === false);
-
-      if (this.state.currencies.length > 0)  {
-        filtered_currency_data = this.state.currencies.filter( currency => currency.supportsTestMode === false);
-      }
- 
-      set_filtered_data = [...filtered_raw_data, ...filtered_currency_data];
-
-
-      this.setState({currencies: set_filtered_data, show_support_test_mode: false});
-      console.table(set_filtered_data);
-
-    } else {
-
-      filtered_raw_data = this.state.raw_data.filter( currency => currency.supportsTestMode === true);
-
-      if (this.state.currencies.length > 0)  {
-        filtered_currency_data = this.state.currencies.filter( currency => currency.supportsTestMode === true);
-      }
- 
-      set_filtered_data = [...filtered_raw_data, ...filtered_currency_data];
-
-
-      this.setState({currencies: set_filtered_data, show_support_test_mode: true});
-      console.table(set_filtered_data);
-    }
-
+    console.table(filtered_currency_data)
 
   }
 
@@ -131,9 +119,9 @@ class App extends React.Component {
     return (
           <div className="wrapper">
 
-            <button className={'not_active '} onClick={this.show_non_supported_currency_in_us} > {this.state.show_non_supported_currency_in_us ? 'Show currency not supported in us ' : 'Show currency supported only in us'}</button>
-            <button className={'not_active '} onClick={this.filter_currency_test_mode} > {this.state.show_support_test_mode ? 'Show currency not available test mode ' : 'Show currency available test mode'}</button>
-            <button className={'not_active'} onClick={this.sort_list_apha_order}>Sort by aphbetic order</button>
+            <button name="show_non_supported_currency_in_us" className={'not_active '} onClick={this.toggle_data} > {this.state.show_non_supported_currency_in_us ? 'Show currency not supported in us ' : 'Show currency supported only in us'}</button>
+            <button name="show_support_test_mode" className={'not_active '} onClick={this.filter} > {this.state.show_support_test_mode ? 'Show currency not available test mode ' : 'Show currency available test mode'}</button>
+            <button name="sort_list_by_aphabetic_order" className={'not_active'} onClick={this.filter}>Sort by aphbetic order</button>
             <button className={'not_active'} >Sort by aphbetic order symbol</button>
 
           </div>
